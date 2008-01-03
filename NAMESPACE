@@ -1,0 +1,4 @@
+useDynLib(hsmm)
+export(hsmm, hsmm.sim, hsmm.smooth, hsmm.viterbi)
+
+S3method(print, hsmm)

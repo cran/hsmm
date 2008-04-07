@@ -1,2 +1,5 @@
-hsmm   using the hsmm package
+hsmm      Using the hsmm package
+hsmm.sim  Simulating hidden semi-Markov models
+hsmm.est  Estimating hidden semi-Markov models
+hsmm.dec  Global and local decoding of hidden semi-Markov models
 

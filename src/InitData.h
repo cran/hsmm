@@ -56,7 +56,6 @@
 	extern int J, Y, tau, M;
 	extern int Censoring, Output;
 	extern bool LeftCensoring, RightCensoring;
-	extern ofstream log_strm;
 
 	int InitInputData(char inputFilename[], double InputData[]);
 	void InitOutputData(char outputPath[]);

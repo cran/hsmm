@@ -14,10 +14,6 @@
 #include <string.h>
 #include <limits.h>
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
 using namespace std;
 
 
@@ -69,7 +65,6 @@ using namespace std;
 int J, tau, M;
 int Censoring, Output;
 bool LeftCensoring, RightCensoring;
-ofstream log_strm;
 
 void FBImpl(int CensoringPara, int tauPara, int JPara,
 			int MPara, double dPara[], double pPara[], double piPara[], double pdfPara[],
@@ -78,56 +73,12 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 {
 	int i, j, k, t, u, v;
 	double Observ, r, s, w;
-	ofstream log_strm;
-	ofstream F_strm;
-	ofstream G_strm;
 
 	try
 	{
-		if (DEBUG_OUTPUT)
-		{
-			log_strm.open("C:/Log.txt");
-			if (log_strm.fail())
-			{
-				stringstream ss;
-				ss << "log_strm";
-				throw file_exception(ss.str());
-				
-			}
-
-			F_strm.open("C:/F.txt");
-			if (log_strm.fail())
-			{
-				stringstream ss;
-				ss << "F_strm";
-				throw file_exception(ss.str());
-				
-			}
-
-			G_strm.open("C:/G.txt");
-			if (G_strm.fail())
-			{
-				stringstream ss;
-				ss << "G_strm";
-				throw file_exception(ss.str());
-				
-			}
-		}
-
-		if (DEBUG_OUTPUT)
-			log_strm << "1" << endl;
 		InitParaAndVar(CensoringPara, tauPara, JPara, MPara, dPara, pPara, piPara, pdfPara);
-		if (DEBUG_OUTPUT)
-			log_strm << "2" << endl;
 
 		CalcStoreD();
-		/*for (j = 0; j <= J - 1; j++)
-			if (mean_d[j] <= 0)
-			{
-				stringstream ss;
-				ss << "mean_d[" << j << "] = " << mean_d[j];
-				throw var_nonpositive_exception(ss.str());
-			}*/
 
 		// forward recursion
 		for (t = 0; t <= tau - 1; t++) 
@@ -144,12 +95,10 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 				N[t] += Norm[j][t];
 			}
 			
-			if (N[t] <= 0)
-			{
-				stringstream ss;
-				ss << "N[" << t << "] = " << N[t];
-				throw var_nonpositive_exception(ss.str());
-			}
+			//if (N[t] <= 0)
+			//{
+			//	throw var_nonpositive_exception(ss.str());
+			//}
 
 			for (j = 0; j <= J - 1; j++)
 			{
@@ -204,18 +153,10 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 					}
 				}
 
-				if (DEBUG_OUTPUT)
-				{
-					F_strm.width(5);
-					F_strm << t << " " << j << " " << F[j][t] << endl;
-				}
-
-				if (F[j][t] <= 0)
-				{
-					stringstream ss;
-					ss << "F[" << j << "][" << t << "] = " << F[j][t];
-					throw var_nonpositive_exception(ss.str());
-				}
+				//if (F[j][t] <= 0)
+				//{
+				//	throw var_nonpositive_exception(ss.str());
+				//}
 			}
 
 			if (t < tau - 1) 
@@ -256,12 +197,6 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 					}
 					G[j][t + 1] += H[j][t + 1][u];
 				}
-
-				if (DEBUG_OUTPUT)
-				{
-					G_strm.width(5);
-					G_strm << t + 1 << " " << j << " " << G[j][t + 1] << endl;
-				}
 			}
 
 			for (j = 0; j <= J - 1; j++) 
@@ -273,8 +208,6 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 				L[j][t] = L1[j][t] + L[j][t + 1] - G[j][t + 1] * StateIn[j][t + 1];
 			}
 		}	
-		if (DEBUG_OUTPUT)
-			log_strm << "3" << endl;
 
 		// Calculation of eta and xi
 		if (LeftCensoring)
@@ -372,9 +305,6 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 			}
 		}
 
-		if (DEBUG_OUTPUT)
-			log_strm << "4" << endl;
-
 		// Save parameters
 		for (j = 0; j <= J - 1; j++)
 		{
@@ -399,28 +329,17 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 	}
 	catch (var_nonpositive_exception e)
 	{
-		if (DEBUG_OUTPUT)
-			log_strm << "var_nonpositive_exception: " << e.str << endl;
 		*err = 1;
 	}
 	catch (memory_exception e)
 	{
-		if (DEBUG_OUTPUT)
-			log_strm << "memory_exception: " << e.str << endl;
 		*err = 2;
 	}
 	catch (file_exception e)
 	{
-		if (DEBUG_OUTPUT)
-			log_strm << "file_exception: " << e.str << endl;
 		*err = 3;
 	}
 
-	if (DEBUG_OUTPUT)
-		log_strm << "5" << endl;
 	freeMemory();
-	if (DEBUG_OUTPUT)
-		log_strm << "6" << endl;
-
 }
 

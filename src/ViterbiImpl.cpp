@@ -5,10 +5,6 @@
 #include <time.h>
 #include <math.h>
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
 
 
 void ViterbiImpl(int tauPara, int JPara,
@@ -19,22 +15,6 @@ pdfPara[],
 	int i, j, k = 0, k_alt, t, u, dummyInt = 0;
 	double Observ, x = 0;
 	bool first, first_i, first_alpha;
-
-	ofstream vit_strm;
-
-	if (DEBUG_OUTPUT)
-	{
-		vit_strm.open("C:/Viterbi.txt");
-		if
-(log_strm.fail())
-		{
-			stringstream ss;
-			ss <<
-"vit_strm";
-			throw file_exception(ss.str());
-			
-		}
-	}
 
 	InitParaAndVar(dummyInt, tauPara, JPara, MPara, dPara, pPara, piPara, pdfPara);
 
@@ -125,13 +105,10 @@ pdfPara[],
 	t = tau - 1;
 	while (maxI[k][t] >= 0)
 	{
-		vit_strm << k << " " << t << " " << maxI[k][t] << " " << endl;
 		for (i = t; i >= t - maxU[k][t] + 1; i--)
 		{
-			vit_strm << i << " " << endl;
 			hiddenStates[i] = k;
 		}
-		vit_strm << endl;
 		k_alt = k;
 		k = maxI[k][t];
 		t -= maxU[k_alt][t];

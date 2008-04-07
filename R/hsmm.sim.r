@@ -72,6 +72,11 @@ hsmm.sim <- function(tau,
     if (od == "t"){
       obs <- c(obs, rmt(no, mm = Para$od$mean[i], cov = Para$od$var[i], df = Para$od$df[i]))    
     }
+    # od = "von.Mises"
+    if (od == "vm"){
+      require(CircStats)
+      obs <- c(obs, rvm(no, mean = Para$od$mean[i], k = Para$od$k[i]))    
+    }
 
     # generation of the path
     path <- c(path, rep(i, no))
@@ -92,3 +97,4 @@ hsmm.sim <- function(tau,
   return(out)
 
   }
+  

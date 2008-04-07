@@ -6,10 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
 
 
 int InitInputData(char inputFilename[], double InputData[])
@@ -36,19 +32,6 @@ void InitParaAndVar(int CensoringPara,
 					double pPara[], double piPara[], double pdfPara[])
 {
 	int i, j, u;
-	ofstream init_strm;
-
-	if (DEBUG_OUTPUT)
-	{
-		init_strm.open("C:/Init.txt");
-		if (init_strm.fail())
-		{
-			stringstream ss;
-			ss << "init_strm";
-			throw file_exception(ss.str());
-			
-		}
-	}
 
 	Censoring = CensoringPara;
 
@@ -58,167 +41,127 @@ void InitParaAndVar(int CensoringPara,
 
 	#if DEBUG_ARRAY_STATIC == 0
 		StateIn = matrix<double>(J, tau);
-		if (StateIn == NULL)
-		{
-			stringstream ss;
-			ss << "StateIn";
-			throw memory_exception(ss.str());
-		}
+		//if (StateIn == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		F = matrix<double>(J, tau);
-		if (F == NULL)
-		{
-			stringstream ss;
-			ss << "F";
-			throw memory_exception(ss.str());
-		}
+		//if (F == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		L = matrix<double>(J, tau); 
-		if (L == NULL)
-		{
-			stringstream ss;
-			ss << "L";
-			throw memory_exception(ss.str());
-		}
+		//if (L == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		G = matrix<double>(J, tau); 
-		if (G == NULL)
-		{
-			stringstream ss;
-			ss << "G";
-			throw memory_exception(ss.str());
-		}
+		//if (G == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		H = cube<double>(J, tau, M + 1);
-		if (H == NULL)
-		{
-			stringstream ss;
-			ss << "H";
-			throw memory_exception(ss.str());
-		}
+		//if (H == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		L1 = matrix<double>(J, tau); 
-		if (L1 == NULL)
-		{
-			stringstream ss;
-			ss << "L1";
-			throw memory_exception(ss.str());
-		}
+		//if (L1 == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		N = new double[tau];
-		if (N == NULL)
-		{
-			stringstream ss;
-			ss << "N";
-			throw memory_exception(ss.str());
-		}
+		//if (N == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		Norm = matrix<double>(J, tau);  
 		if (Norm == NULL)
-		{
-			stringstream ss;
-			ss << "Norm";
-			throw memory_exception(ss.str());
-		}
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		d = matrix<double>(J, M + 1);
-		if (d == NULL)
-		{
-			stringstream ss;
-			ss << "d";
-			throw memory_exception(ss.str());
-		}
+		//if (d == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		if (M + 1 > tau)
 			D = matrix<double>(J, M + 1);
 		else
 			D = matrix<double>(J, tau + 1);
-		if (D == NULL)
-		{
-			stringstream ss;
-			ss << "D";
-			throw memory_exception(ss.str());
-		}
+		//if (D == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		mean_d = new double[J];
-		if (mean_d == NULL)
-		{
-			stringstream ss;
-			ss << "mean_d";
-			throw memory_exception(ss.str());
-		}
+		//if (mean_d == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		p = matrix<double>(J, J);
-		if (p == NULL)
-		{
-			stringstream ss;
-			ss << "p";
-			throw memory_exception(ss.str());
-		}
+		//if (p == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		pi = new double[J];
-		if (pi == NULL)
-		{
-			stringstream ss;
-			ss << "pi";
-			throw memory_exception(ss.str());
-		}
+		//if (pi == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		eta = matrix<double>(J, M + 1);  
-		if (eta == NULL)
-		{
-			stringstream ss;
-			ss << "eta";
-			throw memory_exception(ss.str());
-		}
+		//if (eta == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		xi = matrix<double>(J, M + 1);  
-		if (xi == NULL)
-		{
-			stringstream ss;
-			ss << "xi";
-			throw memory_exception(ss.str());
-		}
+		//if (xi == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		alpha = matrix<double>(J, tau);
-		if (alpha == NULL)
-		{
-			stringstream ss;
-			ss << "alpha";
-			throw memory_exception(ss.str());
-		}
+		//if (alpha == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		maxI = matrix<int>(J, tau);
-		if (maxI == NULL)
-		{
-			stringstream ss;
-			ss << "maxI";
-			throw memory_exception(ss.str());
-		}
+		//if (maxI == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		maxU = matrix<int>(J, tau);
-		if (maxU == NULL)
-		{
-			stringstream ss;
-			ss << "maxU";
-			throw memory_exception(ss.str());
-		}
+		//if (maxU == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		pdf = matrix<double>(J, tau);
-		if (pdf == NULL)
-		{
-			stringstream ss;
-			ss << "pdf";
-			throw memory_exception(ss.str());
-		}
+		//if (pdf == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 
 		hiddenStates = new int[tau];
-		if (hiddenStates == NULL)
-		{
-			stringstream ss;
-			ss << "hiddenStates";
-			throw memory_exception(ss.str());
-		}
+		//if (hiddenStates == NULL)
+		//{
+		//	throw memory_exception(ss.str());
+		//}
 	#endif
 
 	for (j = 0; j <= J - 1; j++)

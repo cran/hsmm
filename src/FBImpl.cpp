@@ -95,10 +95,10 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 				N[t] += Norm[j][t];
 			}
 			
-			//if (N[t] <= 0)
-			//{
-			//	throw var_nonpositive_exception(ss.str());
-			//}
+			if (N[t] <= 0)
+			{
+				throw var_nonpositive_exception();
+			}
 
 			for (j = 0; j <= J - 1; j++)
 			{
@@ -153,10 +153,11 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 					}
 				}
 
-				//if (F[j][t] <= 0)
-				//{
-				//	throw var_nonpositive_exception(ss.str());
-				//}
+
+				if (F[j][t] <= 0)
+				{
+					throw var_nonpositive_exception();
+				}
 			}
 
 			if (t < tau - 1) 

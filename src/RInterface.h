@@ -1,9 +1,10 @@
+#include <R_ext/libextern.h>
 #ifndef RINTERFACE
 	#define RINTERFACE
-#include <R_ext/libextern.h>
+
 	extern "C" 
 	{
-	void LibExport
+	void LibExport 
 		
 FB(int *CensoringPara, int *tauPara, int *JPara, 
 		   int *MPara, double *dPara, double

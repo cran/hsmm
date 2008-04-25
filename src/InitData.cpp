@@ -21,7 +21,7 @@ int InitInputData(char inputFilename[], double InputData[])
 		InputData[i] = atof(str);
 		i++;
 	}
-    fclose(stream);
+  fclose(stream);
 
 	return i;
 }
@@ -41,127 +41,127 @@ void InitParaAndVar(int CensoringPara,
 
 	#if DEBUG_ARRAY_STATIC == 0
 		StateIn = matrix<double>(J, tau);
-		//if (StateIn == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (StateIn == NULL)
+		{
+			throw memory_exception();
+		}
 
 		F = matrix<double>(J, tau);
-		//if (F == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (F == NULL)
+		{
+			throw memory_exception();
+		}
 
 		L = matrix<double>(J, tau); 
-		//if (L == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (L == NULL)
+		{
+			throw memory_exception();
+		}
 
 		G = matrix<double>(J, tau); 
-		//if (G == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (G == NULL)
+		{
+			throw memory_exception();
+		}
 
 		H = cube<double>(J, tau, M + 1);
-		//if (H == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (H == NULL)
+		{
+			throw memory_exception();
+		}
 
 		L1 = matrix<double>(J, tau); 
-		//if (L1 == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (L1 == NULL)
+		{
+			throw memory_exception();
+		}
 
 		N = new double[tau];
-		//if (N == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (N == NULL)
+		{
+			throw memory_exception();
+		}
 
 		Norm = matrix<double>(J, tau);  
 		if (Norm == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		{
+			throw memory_exception();
+		}
 
 		d = matrix<double>(J, M + 1);
-		//if (d == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (d == NULL)
+		{
+			throw memory_exception();
+		}
 
 		if (M + 1 > tau)
 			D = matrix<double>(J, M + 1);
 		else
 			D = matrix<double>(J, tau + 1);
-		//if (D == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (D == NULL)
+		{
+			throw memory_exception();
+		}
 
 		mean_d = new double[J];
-		//if (mean_d == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (mean_d == NULL)
+		{
+			throw memory_exception();
+		}
 
 		p = matrix<double>(J, J);
-		//if (p == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (p == NULL)
+		{
+			throw memory_exception();
+		}
 
 		pi = new double[J];
-		//if (pi == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (pi == NULL)
+		{
+			throw memory_exception();
+		}
 
 		eta = matrix<double>(J, M + 1);  
-		//if (eta == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (eta == NULL)
+		{
+			throw memory_exception();
+		}
 
 		xi = matrix<double>(J, M + 1);  
-		//if (xi == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (xi == NULL)
+		{
+			throw memory_exception();
+		}
 
 		alpha = matrix<double>(J, tau);
-		//if (alpha == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (alpha == NULL)
+		{
+			throw memory_exception();
+		}
 
 		maxI = matrix<int>(J, tau);
-		//if (maxI == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (maxI == NULL)
+		{
+			throw memory_exception();
+		}
 
 		maxU = matrix<int>(J, tau);
-		//if (maxU == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (maxU == NULL)
+		{
+			throw memory_exception();
+		}
 
 		pdf = matrix<double>(J, tau);
-		//if (pdf == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (pdf == NULL)
+		{
+			throw memory_exception();
+		}
 
 		hiddenStates = new int[tau];
-		//if (hiddenStates == NULL)
-		//{
-		//	throw memory_exception(ss.str());
-		//}
+		if (hiddenStates == NULL)
+		{
+			throw memory_exception();
+		}
 	#endif
 
 	for (j = 0; j <= J - 1; j++)

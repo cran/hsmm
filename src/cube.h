@@ -5,7 +5,7 @@
 	#include <assert.h>
 	#include "matrix.h"
 
-	template<class T>inline T*** cube(long Depth, long Rows, long Columns)
+	template<class T>inline T*** cube(int Depth, int Rows, int Columns)
 	{
 		T ***m = matrix<T*>(Depth, Rows);
 		if (m == NULL)

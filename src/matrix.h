@@ -6,7 +6,7 @@
 
 
 
-	template<class T>inline T** matrix(long Rows, long Columns)
+	template<class T>inline T** matrix(int Rows, int Columns)
 	{
 		T **m = new T*[Rows];
 		if (m == NULL)

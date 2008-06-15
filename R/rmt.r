@@ -1,3 +1,6 @@
+# random values for multivatiate t-distribution
+# source: package csampling
+
 rmt <- function (n, df = stop("'df' argument is missing, with no default"), 
     mm = rep(0, mult), cov = diag(rep(1, mult)), mult, is.chol = FALSE) 
 {

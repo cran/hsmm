@@ -2,13 +2,11 @@
 # EM - NOW IT'S HSMM #
 ######################
 
-hsmm <- function(x, 
-                 od, 
-                 rd, 
-                 pi.par,
-                 tpm.par,
-                 od.par,
-                 rd.par,
+hsmm <- function(x, od, od.par,
+                 rd        = "nonp", 
+                 rd.par    = list(np = matrix(0.1, nrow = 10, ncol = 2)),
+                 pi.par    = c(0.5, 0.5),
+                 tpm.par   = matrix(c(0, 1, 1, 0), 2),
                  M         = NA, 
                  Q.max     = 500, 
                  epsilon   = 1e-08,  
@@ -134,8 +132,8 @@ hsmm <- function(x,
           k <- k - 1
           } #endwhile k >= 1
         } # endif k > 1
-  
-      if ((Q >= 1) && (k >= 1) && (is.na(llh[Q]) == FALSE) && (is.na(llh[k]) == FALSE)){
+      #Q >=3 for numerical reasons
+      if ((Q >= 3) && (k >= 1) && (is.na(llh[Q]) == FALSE) && (is.na(llh[k]) == FALSE)){
         if ((llh[Q] - llh[k]) / abs(llh[k]) < epsilon){
           Is.solution.reached <- TRUE
           } # endif llh < epsilon
@@ -350,6 +348,3 @@ hsmm <- function(x,
   class(out) <- "hsmm"
   return(out)
   }
-  
-  
-  

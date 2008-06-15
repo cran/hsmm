@@ -1,4 +1,4 @@
-hsmm.sim <- function(tau,
+hsmm.sim <- function(n,
                      od, 
                      rd, 
                      pi.par,
@@ -7,7 +7,7 @@ hsmm.sim <- function(tau,
                      rd.par,
                      M = NA,
                      seed = NULL){
-
+  tau <- n
   # set seed
   if (!is.null(seed)){ 
     set.seed(seed)
@@ -74,7 +74,6 @@ hsmm.sim <- function(tau,
     }
     # od = "von.Mises"
     if (od == "vm"){
-      require(CircStats)
       obs <- c(obs, rvm(no, mean = Para$od$mean[i], k = Para$od$k[i]))    
     }
 

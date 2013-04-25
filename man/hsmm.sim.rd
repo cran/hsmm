@@ -56,7 +56,7 @@ tpmpar <- matrix(c(0, 0.5, 0.5,
 # Runlength distibution:
 rdpar  <- list(p = c(0.98, 0.98, 0.99))
 # Observation distribution:
-odpar  <- list(mean = c(-1.5, 0, 1.5), var=c(0.5, 0.6, 0.8))
+odpar  <- list(mean = c(-1.5, 0, 1.5), var = c(0.5, 0.6, 0.8))
 
 # Invoking the simulation:
 sim    <- hsmm.sim(n = 2000, od = "norm", rd = "log", 

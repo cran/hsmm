@@ -25,7 +25,7 @@
                    \code{"bern"} \tab = \tab Bernoulli \cr
                    \code{"norm"} \tab = \tab Normal \cr
                    \code{"pois"} \tab = \tab Poisson \cr
-                   \code{"t"}    \tab = \tab Student-t
+                   \code{"t"}    \tab = \tab Student's t
                    }}
   \item{       rd}{Character with the name of the runlength distribution (or sojourn time, dwell time distribution). The following distributions are currently implemented:
                    \tabular{lll}{
@@ -49,8 +49,8 @@
   \item{ censoring}{Integer. If equal to \eqn{1}{1}, the last visited state contributes to the likelihood. 
                    If equal to \eqn{0}{0}, the partial likelihood estimator, which ignores the contribution of the last visited state, is used. 
                    For details see Guedon (2003).}
-  \item{      prt}{Logical. if TRUE, the log-likelihood and number of iterations carried out are printed for each iteration.}
-  \item{ detailed}{Logical. if TRUE, a list of the parameters at every iteration step is written into the \code{ctrl} list.}
+  \item{      prt}{Logical. If TRUE, the log-likelihood and number of iterations carried out are printed for each iteration.}
+  \item{ detailed}{Logical. If TRUE, a list of the parameters at every iteration step is written into the \code{ctrl} list.}
   \item{    r.lim}{Upper and lower bound for the \eqn{r}{r} parameter of the negative binomial distribution in the M-step, 
                    bisection is applied to determine this parameter.}
   \item{ p.log.lim}{Upper and lower bound for the parameter of the logarithmic distribution in the M-step, 
@@ -66,9 +66,9 @@
          Details on the algorithm utilized for the package \code{hsmm} are also presented by Bulla (2006). \cr
          
          Default model \cr
-         The default model is a two-state HSMM with a non-parametric runlength distribution. 
-         Thus, the TPM does not require any initial values
-         (for models with \eqn{J > 2}{J > 2} states, the TPM may be initialized by the value \eqn{1/(J - 1)}{1/(J - 1)} for the off-diagonal elements). 
+         The default model is a two-state hidden semi-Markov model with a non-parametric runlength distribution. 
+         Thus, the transition probability matrix does not require any initial values
+         (for models with \eqn{J > 2}{J > 2} states, the transition probability matrix may be initialized by the value \eqn{1/(J - 1)}{1/(J - 1)} for the off-diagonal elements). 
          The non-parametric runlength distribution is implemented as default distribution 
          and initialized by a uniform distribution on the first ten runlengths. 
          Similarly, the initial probabilities for \eqn{\pi}{pi} follow a uniform distribution. 
@@ -80,7 +80,8 @@
   \item{iter}{Positive integer containing the number of iterations carried out.}
   \item{logl}{Double containing log-likelihood of the fitted model.}
   \item{para}{List object containing the parameter estimates.}
-  \item{ctrl}{List object containing additional control variables. These are \code{solution.reached}, \code{error}, and \code{details}.
+  \item{ctrl}{List object containing additional control variables. These are 
+              \code{solution.reached}, \code{error}, and \code{details}.
               \code{solution.reached} is TRUE, if the stopping criterion is fulfilled. 
               \code{error} returns an error code: 0 = no error, 1 = internal probability less or equal to zero, 2 = memory exception, 
                            3 = file error (internal output from C routine, disabled by default).
@@ -97,7 +98,7 @@
                                \code{"bern"} \tab (Bernoulli): \tab \code{"b"} \cr 
                                \code{"norm"} \tab (Normal):    \tab \code{"mean"}, \code{"var"} \cr
                                \code{"pois"} \tab (Poisson):   \tab \code{"lambda"} \cr
-                               \code{"t"}    \tab (Student-t): \tab \code{"mean"}, \code{"var"}, \code{"df"}
+                               \code{"t"}    \tab (Student's t): \tab \code{"mean"}, \code{"var"}, \code{"df"}
                                }
                                \code{rd.par}: 
                                \tabular{lll}{
@@ -126,7 +127,7 @@ tpmpar <- matrix(c(0, 0.5, 0.5,
                    0.7, 0, 0.3,
                    0.8, 0.2, 0), 3, byrow = TRUE)
 rdpar  <- list(p = c(0.98, 0.98, 0.99))
-odpar  <- list(mean = c(-1.5, 0, 1.5), var=c(0.5, 0.6, 0.8))
+odpar  <- list(mean = c(-1.5, 0, 1.5), var = c(0.5, 0.6, 0.8))
 sim    <- hsmm.sim(n = 2000, od = "norm", rd = "log", 
                    pi.par = pipar, tpm.par = tpmpar, 
                    rd.par = rdpar, od.par = odpar, seed = 3539)
@@ -143,7 +144,7 @@ fit$logl
 fit$para
 
 # For comparison, the estimated parameters seperately together with the true parameter values
-# ar given below.
+# are given below.
 # Transition probability matrix:
 tpmpar
 fit$para$tpm

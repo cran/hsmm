@@ -1,4 +1,3 @@
-#include "Main.h"
 #include "FBImpl.h"
 #include "dCalc.h"
 #include "Mathe.h"
@@ -6,6 +5,7 @@
 #include "error.h"
 #include "matrix.h"
 #include "cube.h"
+#include "consts.h"
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
@@ -13,69 +13,94 @@
 #include <float.h>
 #include <string.h>
 #include <limits.h>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
 
 
-#if DEBUG_ARRAY_STATIC	
-	double StateIn[MaxJ][MaxTau]; 
-	double F[MaxJ][MaxTau]; 
-	double L[MaxJ][MaxTau]; 
-	double G[MaxJ][MaxTau]; 
-	double H[MaxJ][MaxTau][MaxRunlength + 1];
-	double L1[MaxJ][MaxTau];  
-	double N[MaxTau];  
-	double Norm[MaxJ][MaxTau];  
-	double d[MaxJ][MaxRunlength + 1]; 
-	double D[MaxJ][MaxTau + 1]; 
-	double mean_d[MaxJ];
-	double p[MaxJ][MaxJ];   
-	double pi[MaxJ];  																																																																																							
-	double eta[MaxJ][MaxRunlength];  																																																																																	 
-	double xi[MaxJ][MaxRunlength];  																																																																																	 																																																																																 
-	double alpha[MaxJ][MaxTau];
-	int maxI[MaxJ][MaxTau];
-	int maxU[MaxJ][MaxTau];
-	double pdf[MaxJ][MaxTau];
-	int hiddenStates[MaxTau];
-#else
-	double** StateIn = NULL;
-	double** F = NULL;
-	double** L = NULL; 
-	double** G = NULL; 
-	double*** H = NULL;
-	double** L1 = NULL;  
-	double* N = NULL;  
-	double** Norm = NULL;  
-	double** d = NULL; 
-	double** D = NULL;  
-	double* mean_d = NULL;
-	double** p = NULL;
-	double* pi = NULL;  																																																																																						 																																																																																						
-	double** eta = NULL;  																																																																																	 
-	double** xi = NULL;  																																																																																	 
-	double** alpha = NULL;
-	int** maxI = NULL;
-	int** maxU = NULL;
-	double** pdf = NULL;
-	int* hiddenStates = NULL;
-#endif
+double** StateIn = NULL;
+double** F = NULL;
+double** L = NULL; 
+double** G = NULL; 
+double*** H = NULL;
+double** L1 = NULL;  
+double* N = NULL;  
+double** Norm = NULL;  
+double** d = NULL; 
+double** D = NULL;  
+double* mean_d = NULL;
+double** p = NULL;
+double* pi = NULL;  																																																																																						 																																																																																						
+double** eta = NULL;  																																																																																	 
+double** xi = NULL;  																																																																																	 
+double** alpha = NULL;
+int** maxI = NULL;
+int** maxU = NULL;
+double** pdf = NULL;
+int* hiddenStates = NULL;
+
+
 
 int J, tau, M;
 int Censoring, Output;
 bool LeftCensoring, RightCensoring;
 
-void FBImpl(int CensoringPara, int tauPara, int JPara,
-			int MPara, double dPara[], double pPara[], double piPara[], double pdfPara[],
+void FBImpl(int CensoringPara, int tauPara, int JPara, int MPara, 
+			double dPara[], double pPara[], double piPara[], double pdfPara[],
 			double FPara[], double LPara[], double GPara[], double L1Para[], double NPara[], double NormPara[], 
 			double etaPara[], double xiPara[], int *err)
 {
 	int i, j, k, t, u, v;
 	double Observ, r, s, w;
 
-	try
-	{
+	// output all function parameters to file
+	if (run_mode == STORE_FB) {
+		ofstream ofs(PARA_FNAME.c_str());
+		if (!ofs) {
+			cerr << "unable to open file: " << PARA_FNAME << endl;
+			exit(0);
+		}
+		
+		// output tau, J, and M
+		ofs << CensoringPara << endl; 
+		ofs << tauPara << endl; 
+		ofs << JPara << endl; 
+		ofs << MPara << endl << endl; 
+		
+		// output d
+		for (int j = 0; j < JPara; ++j) {
+			for (int m = 0; m < MPara; ++m) {
+				ofs << j << " " << m << " " << dPara[j * MPara + m] << endl;
+			}
+		}
+		ofs << endl;
+		 
+		// output p		
+		for (int j = 0; j < JPara; ++j) {
+			for (int k = 0; k < JPara; ++k) {
+				ofs << j << " " << k << " " << pPara[j * JPara + k] << endl;
+			}
+		}
+		ofs << endl;
+
+		// output pi
+		for (int j = 0; j < JPara; ++j) {
+			ofs << j << " " << piPara[j] << endl;
+		}
+		ofs << endl;
+		
+		// output pdf
+		for (int j = 0; j < JPara; ++j) {
+			for (int t = 0; t < tauPara; ++t) {
+				ofs << j << " " << t << " " << pdfPara[j * tauPara + t] << endl;
+			}
+		}
+		ofs << endl;
+	}
+
+	try {	
 		InitParaAndVar(CensoringPara, tauPara, JPara, MPara, dPara, pPara, piPara, pdfPara);
 
 		CalcStoreD();
@@ -152,7 +177,6 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 						}
 					}
 				}
-
 
 				if (F[j][t] <= 0)
 				{
@@ -307,24 +331,23 @@ void FBImpl(int CensoringPara, int tauPara, int JPara,
 		}
 
 		// Save parameters
-		for (j = 0; j <= J - 1; j++)
-		{
-			for (t = 0; t <= tau - 1; t++)
-			{
+		for (j = 0; j <= J - 1; j++) {
+			for (t = 0; t < tau; t++) {
 				FPara[j * tau + t] = F[j][t];		
-				LPara[j * tau + t] = L[j][t];		
-				GPara[j * tau + t] = G[j][t];		
-				L1Para[j * tau + t] = L1[j][t];		
+				LPara[j * tau + t] = L[j][t];						
 				NormPara[j * tau + t] = Norm[j][t];		
 			}
-			for (t = 0; t <= M - 1; t++)
-			{
+			for (t = 1; t < tau; t++)
+				GPara[j * tau + t] = G[j][t];
+			for (t = 0; t < tau - 1; t++)
+				L1Para[j * tau + t] = L1[j][t];		
+			for (t = 0; t < M; t++)
 				etaPara[j * M + t] = eta[j][t + 1];		
-				xiPara[j * M + t] = xi[j][t + 1];		
-			}
+			if (LeftCensoring)
+				for (t = 0; t < M; t++)
+					xiPara[j * M + t] = xi[j][t + 1];		
 		}
-		for (t = 0; t <= tau - 1; t++)
-		{
+		for (t = 0; t < tau; t++) {
 			NPara[t] = N[t];		
 		}
 	}

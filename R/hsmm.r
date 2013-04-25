@@ -1,6 +1,7 @@
 ######################
 # EM - NOW IT'S HSMM #
 ######################
+require(mgcv)
 
 hsmm <- function(x, od, od.par,
                  rd        = "nonp", 
@@ -18,12 +19,17 @@ hsmm <- function(x, od, od.par,
                  nu.lim    = c(0.01, 100)){
   
   # Input checking:
-  od.t <- c("bern", "norm", "pois", "t")
+  od.t <- c("bern", "norm", "pois", "t", "mvnorm")
   rd.t <- c("nonp", "geom", "nbinom", "log", "pois")
   
   # formatting, renaming, additional variables
-  inputData <- as.vector(x)
-  tau        <- get.tau(inputData)
+  if (length(dim(x)) != 2) {
+    inputData <- as.vector(x)
+  }
+  if (length(dim(x)) == 2) {
+    inputData <- x
+  }
+  tau <- get.tau(inputData)
   censoring <- as.integer(censoring)
  
   # determine number of states
@@ -140,9 +146,10 @@ hsmm <- function(x, od, od.par,
         } # endif Q >= 1 & k >= 1 ...
   
       # Maximum iterations reached?
-      if (Q + 1 > Q.max + 1)
+      if (Q + 1 > Q.max + 1) {
         max.iterations.reached <- TRUE
-  
+      }
+      
       #  Is solution reached?
       if ((!(Is.solution.reached) && (!max.iterations.reached))){
         # Reestimation pi
@@ -306,6 +313,36 @@ hsmm <- function(x, od, od.par,
             } # endloop j in 1:J
           } # endif od == "Student.t"
     
+          if (od == "mvnorm"){
+            obs.dim <- dim(inputData)[1]
+            # Reestimation mu
+            for (j in 1:J){
+              s <- sum(L[1:tau, j])
+              for (k in 1:obs.dim) {
+                r <- sum(L[1:tau, j] * inputData[k, 1:tau])
+                EM.Para[[Q + 1]]$od$mean[k, j] = r / s;
+                } # endloop k in 1:obs.dim
+              } # endloop j in 1:J
+    
+            # Reestimation sigma
+            for (j in 1:J){
+              s <- sum(L[1:tau, j])   
+              a <- array(0, dim = c(obs.dim, obs.dim, tau))
+              for (u in 1:tau) {
+                m <- (inputData[,u] - EM.Para[[Q + 1]]$od$mean[,j]) %*% 
+                     t((inputData[,u] - EM.Para[[Q + 1]]$od$mean[,j]))
+                   a[,,u] <- L[u, j] * array(m)
+                }
+              r <- rowSums(a, dims = 2)   
+              y <- r / s
+              for (k in 1:obs.dim) {
+                for (l in 1:obs.dim) {
+                  EM.Para[[Q + 1]]$od$sigma[k, l, j] <- y[k, l];
+                  }
+                }
+              } #endloop j in 1:J
+            } # endif od == "mvnorm"
+
           Q <- Q + 1
           
       } # Is solution reached or maximum iterations reached?

@@ -25,7 +25,8 @@
 \details{The function \code{hsmm.smooth} calculates the so-called smoothed probabilities 
 \deqn{P(S_t = i | X_1, ... , X_{T})}{%
 P(S[t] = i | X[1], ... , X[T])}
-for all \eqn{t \in 1, ... , T}{t in 1, ... , T} and \eqn{i \in 1,...,J}{i in 1,...,J}. This procedure is often termed 'local decoding'. 
+for all \eqn{t \in 1, ... , T}{t in 1, ... , T} and \eqn{i \in 1,...,J}{i in 1,...,J}, with \eqn{X}{X} denoting the observations and 
+\eqn{S}{S} the hidden states. This procedure is often termed 'local decoding'. 
 The sequence of the most probable states follows directly. 
 Note that this sequence is not necessarily the most probable state sequence, which is determined by the Viterbi algorithm. 
 Also note that local decoding may ignore restrictions imposed by the transition probability matrix, such as forbidden transitions,
@@ -48,7 +49,7 @@ tpmpar <- matrix(c(0, 0.5, 0.5,
                    0.7, 0, 0.3,
                    0.8, 0.2, 0), 3, byrow = TRUE)
 rdpar  <- list(p = c(0.98, 0.98, 0.99))
-odpar  <- list(mean = c(-1.5, 0, 1.5), var=c(0.5, 0.6, 0.8))
+odpar  <- list(mean = c(-1.5, 0, 1.5), var = c(0.5, 0.6, 0.8))
 sim    <- hsmm.sim(n = 2000, od = "norm", rd = "log", 
                    pi.par = pipar, tpm.par = tpmpar, 
                    rd.par = rdpar, od.par = odpar, seed = 3539)
@@ -58,7 +59,7 @@ fit.sm <- hsmm.smooth(sim$obs, od = "norm", rd = "log",
                       pi.par = pipar, tpm.par = tpmpar, 
                       od.par = odpar, rd.par = rdpar)
 
-# The first 15 smoohting probabilities:
+# The first 15 smoothing probabilities:
 round(fit.sm$sm[, 1:15], 2)
 
 # The first 15 values of the resulting path:

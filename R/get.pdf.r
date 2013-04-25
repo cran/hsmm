@@ -10,7 +10,7 @@ get.pdf <- function(inputData, od, J, M, param){
           pdf[t + (j - 1) * tau] <- param$b[j]
           }
         else {
-          pdf[t + (j - 1) * tau] <- 1 - param$b[j]   
+          pdf[t + (j - 1) * tau] <- 1 - param$b[j]
           }
         }
       }
@@ -26,6 +26,13 @@ get.pdf <- function(inputData, od, J, M, param){
     if (od == "t"){
       pdf[(1 + (j - 1) * tau):(tau + (j - 1) * tau)] <- dtmod(inputData[1:tau], mu = param$mean[j], sigma = sqrt(param$var[j]), nu = param$df[j])
       }
-    }
+     # od = "multivar.Gaussian"
+    if (od == "mvnorm"){
+      pdf[(1 + (j - 1) * tau):(tau + (j - 1) * tau)] <- dmvnorm(aperm(inputData[,1:tau]), mean = param$mean[,j], sigma = param$sigma[,,j])
+      }
+   }
+
+  lower_bound <- 1e-300
+  pdf[pdf < lower_bound] <- lower_bound
   return(pdf)
-  }
+}

@@ -1,3 +1,5 @@
+require(mvtnorm)
+
 hsmm.sim <- function(n,
                      od, 
                      rd, 
@@ -7,7 +9,7 @@ hsmm.sim <- function(n,
                      rd.par,
                      M = NA,
                      seed = NULL){
-  tau <- n
+  
   # set seed
   if (!is.null(seed)){ 
     set.seed(seed)
@@ -27,7 +29,7 @@ hsmm.sim <- function(n,
     if (rd == "non.parametric"){
       M <- as.integer(dim(rd.par$np)[1])
       } else {
-      M <- as.integer(max(tau, 1000))
+      M <- as.integer(max(n, 1000))
       }
     } # endif isna(M)
                     
@@ -50,10 +52,10 @@ hsmm.sim <- function(n,
   t    <- 0
 
   # generation of the TS
-  while (t < tau)
+  while (t < n)
   {
     # the number of observations to be generated
-    no <- sample(c(1:length(RL[i, RL[i,]!=0])), p=RL[i, RL[i,]!=0], 1)
+    no <- sample(c(1:length(RL[i, RL[i,]!=0])), prob=RL[i, RL[i,]!=0], 1)
 
     # generation of the observations 
     # od = "Bernoulli"
@@ -76,19 +78,28 @@ hsmm.sim <- function(n,
     if (od == "vm"){
       obs <- c(obs, rvm(no, mean = Para$od$mean[i], k = Para$od$k[i]))    
     }
+    # od = "multivar.Gaussian"
+    if (od == "mvnorm"){
+      obs <- cbind(obs, aperm(rmvnorm(no, mean = Para$od$mean[,i], sigma = Para$od$sigma[,,i])))    
+    }
 
     # generation of the path
     path <- c(path, rep(i, no))
 
     # sample next state
-    i <- sample(1:J, p=Para$tpm[, i], 1)
+    i <- sample(1:J, prob=Para$tpm[, i], 1)
 
-    # update the length of the obs
-    t <- length(obs)
+    t <- t + no
   }
 
-  obs  <- obs[1:tau]
-  path <- path[1:tau]
+  if (length(dim(obs)) == 1) {
+    obs  <- obs[1:n]
+  }
+  if (length(dim(obs)) == 2) {
+    obs  <- obs[,1:n]
+  }
+  
+  path <- path[1:n]
     
   out <- list(call   = match.call(),
               obs    = obs, 

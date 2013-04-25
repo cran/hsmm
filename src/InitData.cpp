@@ -1,3 +1,4 @@
+#include "consts.h"
 #include "InitData.h"
 #include "matrix.h"
 #include "cube.h"
@@ -5,6 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+
+using namespace std;
 
 
 
@@ -39,139 +43,137 @@ void InitParaAndVar(int CensoringPara,
 	J = JPara;
 	M = MPara;
 
-	#if DEBUG_ARRAY_STATIC == 0
-		StateIn = matrix<double>(J, tau);
-		if (StateIn == NULL)
-		{
-			throw memory_exception();
-		}
+	StateIn = matrix<double>(J, tau);
+	if (StateIn == NULL)
+	{
+		throw memory_exception();
+	}
 
-		F = matrix<double>(J, tau);
-		if (F == NULL)
-		{
-			throw memory_exception();
-		}
+	F = matrix<double>(J, tau); 
+	if (F == NULL)
+	{
+		throw memory_exception();
+	}
 
-		L = matrix<double>(J, tau); 
-		if (L == NULL)
-		{
-			throw memory_exception();
-		}
+	L = matrix<double>(J, tau); 
+	if (L == NULL)
+	{
+		throw memory_exception();
+	}
 
-		G = matrix<double>(J, tau); 
-		if (G == NULL)
-		{
-			throw memory_exception();
-		}
+	G = matrix<double>(J, tau); 
+	if (G == NULL)
+	{
+		throw memory_exception();
+	}
 
-		H = cube<double>(J, tau, M + 1);
-		if (H == NULL)
-		{
-			throw memory_exception();
-		}
+	H = cube<double>(J, tau, M + 1);
+	if (H == NULL)
+	{
+		throw memory_exception();
+	}
 
-		L1 = matrix<double>(J, tau); 
-		if (L1 == NULL)
-		{
-			throw memory_exception();
-		}
+	L1 = matrix<double>(J, tau); 
+	if (L1 == NULL)
+	{
+		throw memory_exception();
+	}
 
-		N = new double[tau];
-		if (N == NULL)
-		{
-			throw memory_exception();
-		}
+	N = new double[tau];
+	if (N == NULL)
+	{
+		throw memory_exception();
+	}
 
-		Norm = matrix<double>(J, tau);  
-		if (Norm == NULL)
-		{
-			throw memory_exception();
-		}
+	Norm = matrix<double>(J, tau);  
+	if (Norm == NULL)
+	{
+		throw memory_exception();
+	}
 
-		d = matrix<double>(J, M + 1);
-		if (d == NULL)
-		{
-			throw memory_exception();
-		}
+	d = matrix<double>(J, M + 1);
+	if (d == NULL)
+	{
+		throw memory_exception();
+	}
 
-		if (M + 1 > tau)
-			D = matrix<double>(J, M + 1);
-		else
-			D = matrix<double>(J, tau + 1);
-		if (D == NULL)
-		{
-			throw memory_exception();
-		}
+	if (M + 1 > tau)
+		D = matrix<double>(J, M + 1);
+	else
+		D = matrix<double>(J, tau + 1);
+	if (D == NULL)
+	{
+		throw memory_exception();
+	}
 
-		mean_d = new double[J];
-		if (mean_d == NULL)
-		{
-			throw memory_exception();
-		}
+	mean_d = new double[J];
+	if (mean_d == NULL)
+	{
+		throw memory_exception();
+	}
 
-		p = matrix<double>(J, J);
-		if (p == NULL)
-		{
-			throw memory_exception();
-		}
+	p = matrix<double>(J, J);
+	if (p == NULL)
+	{
+		throw memory_exception();
+	}
 
-		pi = new double[J];
-		if (pi == NULL)
-		{
-			throw memory_exception();
-		}
+	pi = new double[J];
+	if (pi == NULL)
+	{
+		throw memory_exception();
+	}
 
-		eta = matrix<double>(J, M + 1);  
-		if (eta == NULL)
-		{
-			throw memory_exception();
-		}
+	eta = matrix<double>(J, M + 1);  
+	if (eta == NULL)
+	{
+		throw memory_exception();
+	}
 
-		xi = matrix<double>(J, M + 1);  
-		if (xi == NULL)
-		{
-			throw memory_exception();
-		}
+	xi = matrix<double>(J, M + 1);  
+	if (xi == NULL)
+	{
+		throw memory_exception();
+	}
 
-		alpha = matrix<double>(J, tau);
-		if (alpha == NULL)
-		{
-			throw memory_exception();
-		}
+	alpha = matrix<double>(J, tau);
+	if (alpha == NULL)
+	{
+		throw memory_exception();
+	}
 
-		maxI = matrix<int>(J, tau);
-		if (maxI == NULL)
-		{
-			throw memory_exception();
-		}
+	maxI = matrix<int>(J, tau);
+	if (maxI == NULL)
+	{
+		throw memory_exception();
+	}
 
-		maxU = matrix<int>(J, tau);
-		if (maxU == NULL)
-		{
-			throw memory_exception();
-		}
+	maxU = matrix<int>(J, tau);
+	if (maxU == NULL)
+	{
+		throw memory_exception();
+	}
 
-		pdf = matrix<double>(J, tau);
-		if (pdf == NULL)
-		{
-			throw memory_exception();
-		}
+	pdf = matrix<double>(J, tau);
+	if (pdf == NULL)
+	{
+		throw memory_exception();
+	}
 
-		hiddenStates = new int[tau];
-		if (hiddenStates == NULL)
-		{
-			throw memory_exception();
-		}
-	#endif
+	hiddenStates = new int[tau];
+	if (hiddenStates == NULL)
+	{
+		throw memory_exception();
+	}
 
+	
 	for (j = 0; j <= J - 1; j++)
 	{
 		pi[j] = piPara[j];
 	}
 
 	for (j = 0; j <= J - 1; j++)
-		for (u = 0; u <= M - 1; u++)
-		{
+		for (u = 0; u <= M - 1; u++) {
 			d[j][u + 1] = dPara[j * M + u];
 		}
 
@@ -213,9 +215,7 @@ void InitParaAndVar(int CensoringPara,
 
 void freeMemory()
 {
-#if DEBUG_ARRAY_STATIC == 0
 	if (StateIn != NULL) free_matrix(StateIn);
-	if (F != NULL) free_matrix(F);
 	if (L != NULL) free_matrix(L); 
 	if (G != NULL) free_matrix(G); 
 	if (H != NULL) free_cube(H);
@@ -233,5 +233,4 @@ void freeMemory()
 	if (maxI != NULL) free_matrix(maxI);
 	if (maxU != NULL) free_matrix(maxU);	
 	if (pdf != NULL) free_matrix(pdf);
-#endif
 }

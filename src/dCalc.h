@@ -1,7 +1,6 @@
 #ifndef DCALC
 	#define DCALC
 
-	#include "Main.h"
 	#include "matrix.h"
 	#include "cube.h"
 	#include <stdio.h>
